@@ -1,5 +1,7 @@
 package com.iamsajan.youtubeclone.service;
 
+import com.iamsajan.youtubeclone.dto.UploadVideoResponseDto;
+import com.iamsajan.youtubeclone.dto.VideoDto;
 import com.iamsajan.youtubeclone.model.Video;
 import com.iamsajan.youtubeclone.repository.VideoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +19,7 @@ public class VideoService {
         this.videoRepository = videoRepository;
     }
 
-    public void uploadVideo(MultipartFile multipartFile) {
+    public UploadVideoResponseDto uploadVideo(MultipartFile multipartFile) {
         // upload file to local storage get the path
         log.info("Uploading video to local storage");
         String videoUrl = localBucketService.uploadFile(multipartFile);
@@ -25,11 +27,43 @@ public class VideoService {
 
         // save video details to db
         Video video = Video.builder()
-                .title(multipartFile.getOriginalFilename())
                 .url(videoUrl)
                 .build();
         log.info("Saving video details to db");
-        videoRepository.save(video);
+        Video savedVideo = videoRepository.save(video);
+        return new UploadVideoResponseDto(savedVideo.getId(), videoUrl);
+    }
 
+    public VideoDto editVideoMetaData(VideoDto videoDto) {
+        // find the video by video id
+        Video savedVideo = getVideoById(videoDto.getId());
+
+        // map the videoDto to video
+        savedVideo.setTitle(videoDto.getTitle());
+        savedVideo.setDescription(videoDto.getDescription());
+        savedVideo.setTags(videoDto.getTags());
+        savedVideo.setThumbnailUrl(videoDto.getThumbnailUrl());
+        savedVideo.setVideoStatus(videoDto.getVideoStatus());
+
+        // save the video to the database
+        videoRepository.save(savedVideo);
+        log.info("Video metadata updated successfully");
+
+        return videoDto;
+    }
+
+    public String uploadThumbnail(MultipartFile multipartFile, String videoId) {
+        // find the video by video id
+        Video savedVideo = getVideoById(videoId);
+        log.info("Uploading thumbnails to local storage");
+        String thumbnailUrl = localBucketService.uploadFile(multipartFile);
+        savedVideo.setThumbnailUrl(thumbnailUrl);
+
+        return thumbnailUrl;
+    }
+
+    public Video getVideoById(String videoId) {
+        return videoRepository.findById(videoId)
+                .orElseThrow(() -> new IllegalArgumentException("Video not found"));
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Data
@@ -24,7 +25,7 @@ public class Video {
     private String userId;
     private AtomicInteger likes = new AtomicInteger(0);
     private AtomicInteger disLikes = new AtomicInteger(0);
-    private List<String> tags;
+    private Set<String> tags;
     private String url;
     private VideoStatus videoStatus;
     private AtomicInteger viewCount = new AtomicInteger(0);
