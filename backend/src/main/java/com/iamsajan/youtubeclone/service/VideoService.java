@@ -58,6 +58,7 @@ public class VideoService {
         log.info("Uploading thumbnails to local storage");
         String thumbnailUrl = localBucketService.uploadFile(multipartFile);
         savedVideo.setThumbnailUrl(thumbnailUrl);
+        videoRepository.save(savedVideo);
 
         return thumbnailUrl;
     }
