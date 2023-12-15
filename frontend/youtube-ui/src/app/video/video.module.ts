@@ -2,16 +2,20 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 import {VideoRoutingModule} from './video-routing.module';
-import { SavedVideoDetailsComponent } from './saved-video-details/saved-video-details.component';
+import { SaveVideoDetailsComponent } from './save-video-details/save-video-details.component';
+import {MaterialModule} from "../material/material.module";
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
   declarations: [
-    SavedVideoDetailsComponent
+    SaveVideoDetailsComponent
   ],
   imports: [
     CommonModule,
-    VideoRoutingModule
+    VideoRoutingModule,
+    MaterialModule,
+    ReactiveFormsModule
   ]
 })
 export class VideoModule {

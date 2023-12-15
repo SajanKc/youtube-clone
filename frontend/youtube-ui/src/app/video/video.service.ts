@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {UploadVideoResponse} from "./UploadVideoResponse";
+import {UploadVideoResponse} from "./dto/UploadVideoResponse";
+import {VideoDto} from "./dto/VideoDto";
 
 @Injectable({
   providedIn: 'root'
@@ -19,5 +20,8 @@ export class VideoService {
     return this.httpClient.post<UploadVideoResponse>(this.baseUrl, formData)
   }
 
+  updateVideoMetaData(videoDto: VideoDto): Observable<any> {
+    return this.httpClient.put(this.baseUrl, videoDto)
+  }
 
 }

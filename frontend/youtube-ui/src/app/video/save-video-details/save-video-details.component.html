@@ -1,0 +1,57 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-2">
+      blank
+    </div>
+    <div class="col-md-10">
+      <h1>Add Video Metadata</h1>
+      <form [formGroup]="saveVideoMetadataForm" (ngSubmit)="onSubmit()" class="w-100">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title">
+        </mat-form-field>
+        <br/>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description">
+        </mat-form-field>
+        <br/>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Video Status</mat-label>
+          <mat-select formControlName="videoStatus">
+            <mat-option value="PUBLIC">PUBLIC</mat-option>
+            <mat-option value="PRIVATE">PRIVATE</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br/>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Tags</mat-label>
+          <mat-chip-grid #chipGrid aria-label="Enter tags">
+            <mat-chip-row *ngFor="let tag of tags"
+                          (removed)="remove(tag)"
+                          [editable]="true"
+                          (edited)="edit(tag, $event)"
+                          [aria-description]="'press enter to edit ' + tag">
+              {{ tag }}
+              <button matChipRemove [attr.aria-label]="'remove ' + tag">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+            <input placeholder="New tag..."
+                   [matChipInputFor]="chipGrid"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matChipInputAddOnBlur]="addOnBlur"
+                   (matChipInputTokenEnd)="add($event)"/>
+          </mat-chip-grid>
+        </mat-form-field>
+        <br/>
+
+        <button mat-raised-button type="submit" [disabled]="saveVideoMetadataForm.invalid">Submit</button>
+      </form>
+
+    </div>
+  </div>
+</div>
